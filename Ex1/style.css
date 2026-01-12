@@ -1,0 +1,157 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f0f4f0;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Div Principal */
+#wrapper {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-top: 8px solid #2d5a27;
+}
+
+/* Cabeçalho */
+header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    color: #2d5a27;
+    margin-bottom: 5px;
+}
+
+/* Menu de Navegação */
+nav {
+    background-color: #2d5a27;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Conteúdo */
+main {
+    padding: 20px 0;
+}
+
+.imagem-destaque img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.servicos ul {
+    background-color: #e8f5e8;
+    padding: 20px 40px;
+    border-radius: 5px;
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Tabela */
+.tabela-plantas {
+    margin: 30px 0;
+    overflow-x: auto; /* Garante que a tabela se ajusta a ecrãs pequenos */
+}
+
+.tabela-plantas img {
+    width: 80px;          
+    height: 80px;         
+    object-fit: cover;    /* Corta a imagem e preenche o quadrado sem deformar */
+    border-radius: 4px;   
+    display: block;       /* Remove espaços abaixo da imagem */
+    margin: 0 auto;       /* Centra na célula da tabela */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Elimina espaços duplos entre bordas */
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+table th {
+    background-color: #2d5a27;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+
+table img {
+    border-radius: 4px;
+    display: block;
+    margin: auto;
+}
+
+/* Formulário */
+.formulario-servicos {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    margin-top: 20px;
+}
+
+.campo {
+    margin-bottom: 15px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #2d5a27;
+}
+
+.campo input, .campo select, .campo textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+}
+
+.botao-enviar {
+    background-color: #2d5a27;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.botao-enviar:hover {
+    background-color: #3e7a36;
+}

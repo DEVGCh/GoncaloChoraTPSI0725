@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços | Viveiro Garden LX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="wrapper">
+        
+        <header>
+            <h1>Nossos Serviços</h1>
+            <p>Soluções profissionais para o seu jardim</p>
+        </header>
+
+        <nav>
+            <a href="index.html">Início</a> | 
+            <a href="plantas.html">Catálogo</a> | 
+            <a href="servicos.html">Serviços</a>
+        </nav>
+
+        <main>
+            <div class="bloco-texto">
+                <h2>Peça o seu Orçamento</h2>
+                <p>Seja para um jardim vertical ou manutenção de relvados, preencha o formulário abaixo e entraremos em contacto.</p>
+            </div>
+
+            <div class="formulario-servicos">
+                <form>
+                    <div class="campo">
+                        <label for="nome">Nome Completo:</label>
+                        <input type="text" id="nome" name="nome" placeholder="Escreva o seu nome aqui..." required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="email">E-mail de Contacto:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="servico">Serviço Pretendido:</label>
+                        <select id="servico" name="servico">
+                            <option value="paisagismo">Projeto de Paisagismo</option>
+                            <option value="rega">Instalação de Rega</option>
+                            <option value="manutencao">Manutenção Mensal</option>
+                            <option value="outro">Outros Assuntos</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="mensagem">Detalhes do Pedido:</label>
+                        <textarea id="mensagem" name="mensagem" rows="5"></textarea>
+                    </div>
+
+                    <button class="botao-enviar">Enviar Pedido</button>
+
+                </form>
+            </div>
+
+            
+
+        </main>
+
+        <footer>
+            <p>Garden Center LX - UC00604 EX1</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
