@@ -1,11 +1,6 @@
-body { 
-    padding-top: 80px; 
-}
-
-/* Hero Section */
+/* Hero Section - sobrepor texto */
 .hero-section {
     position: relative;
-    overflow: hidden;
 }
 
 .hero-img {
@@ -21,73 +16,21 @@ body {
     transform: translate(-50%, -50%);
     text-align: center;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.8);
 }
 
-/* Feature boxes */
-.feature-box {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-box:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.feature-box i {
-    transition: color 0.3s ease;
-}
-
-.feature-box:hover i {
-    color: #6c757d;
-}
-
-/* Galeria */
-.row.g-3 img {
-    height: 250px;
-    width: 100%;
-    object-fit: cover;
-}
-
-.img-vinho {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    border-radius: 4px;
-    display: block;
-    margin: 0 auto;
-}
-
-.table td {
-    vertical-align: middle;
-}
-
-footer {
-    margin-top: auto;
-}
-
-/* Efeito hover nos cards */
-.card-hover {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-hover:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Imagens dos cards */
+/* Alturas fixas para imagens */
 .card-img-top {
     height: 200px;
     object-fit: cover;
 }
 
-/* Vinho em destaque */
-.vinho-destaque {
-    border: 2px solid #ffc107;
-    transition: transform 0.3s ease;
+.galeria-img {
+    height: 250px;
+    object-fit: cover;
 }
 
-.vinho-destaque:hover {
-    transform: scale(1.02);
+/* Vinho em Destaque */
+.vinho-destaque {
+    border: 2px solid #ffc107;
 }
