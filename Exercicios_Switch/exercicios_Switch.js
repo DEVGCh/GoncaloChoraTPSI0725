@@ -1,8 +1,8 @@
 const prompt = require("prompt-sync")();
 
-// ============================================================
+
 // EX 1 - Tipo de dia
-// ============================================================
+
 function tipoDeDia(dia) {
     switch (dia) {
         case "segunda":
@@ -22,9 +22,9 @@ function tipoDeDia(dia) {
     }
 }
 
-// ============================================================
+
 // EX 2 - Classificação de nota
-// ============================================================
+
 function classificacaoNota(nota) {
     if (nota >= 90) {
         console.log("Excelente");
@@ -37,9 +37,9 @@ function classificacaoNota(nota) {
     }
 }
 
-// ============================================================
+
 // EX 3 - Tipo de pedido
-// ============================================================
+
 function tipoDePedido(pedido) {
     switch (pedido.tipo) {
         case "compra":
@@ -54,9 +54,9 @@ function tipoDePedido(pedido) {
     }
 }
 
-// ============================================================
+
 // EX 4 - Tipo de dado
-// ============================================================
+
 function tipoDeDado(valor) {
     if (typeof valor === "number" && valor % 1 === 0) {
         console.log("Número inteiro");
@@ -71,9 +71,9 @@ function tipoDeDado(valor) {
     }
 }
 
-// ============================================================
+
 // EX 5 - Análise de mensagem
-// ============================================================
+
 function analisarMensagem(mensagem) {
     let ultimoCaracter = mensagem[mensagem.length - 1];
 
@@ -88,9 +88,9 @@ function analisarMensagem(mensagem) {
     }
 }
 
-// ============================================================
+
 // EX 6 - Estado do servidor
-// ============================================================
+
 function estadoDoServidor(servidor) {
     if (servidor.status === "ok" && servidor.tempo_resposta > 200) {
         console.log("Servidor lento");
@@ -103,9 +103,9 @@ function estadoDoServidor(servidor) {
     }
 }
 
-// ============================================================
+
 // EX 7 - Classificação de produto
-// ============================================================
+
 function classificacaoProduto(produto) {
     if (produto.categoria === "eletrônico" && produto.preco > 1000) {
         console.log("Produto de luxo");
@@ -118,9 +118,9 @@ function classificacaoProduto(produto) {
     }
 }
 
-// ============================================================
+
 // EX 8 - Operação matemática
-// ============================================================
+
 function operacaoMatematica(operacao, num1, num2) {
     let resultado = 0;
 
@@ -151,9 +151,9 @@ function operacaoMatematica(operacao, num1, num2) {
     }
 }
 
-// ============================================================
+
 // EX 9 - Processamento de requisição
-// ============================================================
+
 function processarRequisicao(requisicao) {
     if (requisicao.metodo === "GET") {
         console.log("Requisição GET recebida");
@@ -166,9 +166,9 @@ function processarRequisicao(requisicao) {
     }
 }
 
-// ============================================================
+
 // EX 10 - Pedra, papel ou tesoura
-// ============================================================
+
 function pedraPapelTesoura(jogador1, jogador2) {
     if (jogador1 === jogador2) {
         console.log("Empate");
@@ -183,9 +183,9 @@ function pedraPapelTesoura(jogador1, jogador2) {
     }
 }
 
-// ============================================================
+
 // TESTES
-// ============================================================
+
 
 console.log("=== EX 1 - Tipo de dia ===");
 tipoDeDia("domingo");

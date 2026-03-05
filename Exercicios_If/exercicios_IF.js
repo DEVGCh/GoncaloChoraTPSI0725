@@ -1,8 +1,7 @@
 const prompt = require("prompt-sync")();
 
-// ============================================================
 // EX 1 - Converter segundos em horas, minutos e segundos
-// ============================================================
+
 function converterSegundos(totalSegundos) {
     let horas = Math.floor(totalSegundos / 3600);
     let resto = totalSegundos % 3600;
@@ -12,9 +11,9 @@ function converterSegundos(totalSegundos) {
     console.log(horas + " hora(s), " + minutos + " minuto(s) e " + segundos + " segundo(s)");
 }
 
-// ============================================================
+
 // EX 2 - Encontrar o maior e o menor entre 3 numeros
-// ============================================================
+
 function maiorMenor(num1, num2, num3) {
     let maior;
     let menor;
@@ -39,9 +38,9 @@ function maiorMenor(num1, num2, num3) {
     console.log("Menor: " + menor);
 }
 
-// ============================================================
+
 // EX 3 - Mostrar 2 numeros por ordem crescente e decrescente
-// ============================================================
+
 function ordemDoisNumeros(num1, num2) {
     if (num1 <= num2) {
         console.log("Crescente: " + num1 + ", " + num2);
@@ -52,9 +51,9 @@ function ordemDoisNumeros(num1, num2) {
     }
 }
 
-// ============================================================
+
 // EX 4 - Verificar se o cheque pode ser descontado
-// ============================================================
+
 function descontarCheque(saldo, cheque) {
     if (cheque > saldo) {
         console.log("Cheque não pode ser descontado. Saldo insuficiente.");
@@ -64,9 +63,9 @@ function descontarCheque(saldo, cheque) {
     }
 }
 
-// ============================================================
+
 // EX 5 - Ler 3 valores e exibir por ordem crescente e decrescente
-// ============================================================
+
 function ordemTresNumeros(num1, num2, num3) {
     let maior;
     let meio;
@@ -105,9 +104,9 @@ function ordemTresNumeros(num1, num2, num3) {
     console.log("Decrescente: " + maior + ", " + meio + ", " + menor);
 }
 
-// ============================================================
+
 // EX 6 - Desconto de compra
-// ============================================================
+
 function descontoCompra(nomeCliente, valorCompra) {
     let desconto = 0;
 
@@ -127,9 +126,9 @@ function descontoCompra(nomeCliente, valorCompra) {
     console.log("Total a pagar: " + totalAPagar.toFixed(2) + "€");
 }
 
-// ============================================================
+
 // EX 7 - Calcular média com pesos (2, 3, 5)
-// ============================================================
+
 function mediaComPesos(nota1, nota2, nota3) {
     let media = 0;
     media = (nota1 * 2 + nota2 * 3 + nota3 * 5) / 10;
@@ -143,9 +142,9 @@ function mediaComPesos(nota1, nota2, nota3) {
     }
 }
 
-// ============================================================
+
 // EX 8 - Média de 10 notas e alunos acima da média
-// ============================================================
+
 function mediaDezNotas() {
 
     let soma = 0;
@@ -172,9 +171,9 @@ function mediaDezNotas() {
     console.log("Alunos com nota igual ou acima da média: " + acimaDaMedia);
 }
 
-// ============================================================
+
 // EX SWITCH - Exibir nome do mês
-// ============================================================
+
 function nomeMes(numero) {
     switch (numero) {
         case 1:  console.log("Janeiro");   break;
@@ -193,9 +192,9 @@ function nomeMes(numero) {
     }
 }
 
-// ============================================================
+
 // TESTES
-// ============================================================
+
 
 console.log("=== EXERCÍCIO 1 ===");
 converterSegundos(3665);
