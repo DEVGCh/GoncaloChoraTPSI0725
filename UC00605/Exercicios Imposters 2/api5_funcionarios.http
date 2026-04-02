@@ -1,0 +1,252 @@
+# API 5 — Gestão de Funcionários
+
+### Limpar
+DELETE http://localhost:2525/imposters/4547
+
+###
+
+### Criar imposter
+POST http://localhost:2525/imposters
+
+{
+  "port": 4547,
+  "protocol": "http",
+  "name": "API5_Funcionarios",
+  "stubs": [
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/funcionarios" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"funcionarios\": [{\"id\": 1, \"nome\": \"Maria Santos\", \"cargo\": \"Analista\", \"salario\": 1200}, {\"id\": 2, \"nome\": \"Rui Ferreira\", \"cargo\": \"Técnico\", \"salario\": 900}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/funcionarios" } },
+        { "deepEquals": { "body": { "nome": "Novo", "cargo": "Estagiario", "salario": 400 } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"salary_below_minimum\", \"message\": \"O salário não pode ser inferior a 760€.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/funcionarios" } },
+        { "deepEquals": { "body": { "nome": "Novo", "cargo": "Estagiario", "salario": 500 } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"salary_below_minimum\", \"message\": \"O salário não pode ser inferior a 760€.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/funcionarios" } },
+        { "deepEquals": { "body": { "nome": "Novo", "cargo": "Estagiario", "salario": 700 } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"salary_below_minimum\", \"message\": \"O salário não pode ser inferior a 760€.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/funcionarios" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/funcionarios/3" },
+            "body": "{\"id\": 3, \"status\": \"created\", \"message\": \"Funcionário adicionado com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/funcionarios/1/salario" } },
+        { "deepEquals": { "body": { "salario": 400 } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"salary_below_minimum\", \"message\": \"O salário não pode ser inferior a 760€.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/funcionarios/1/salario" } },
+        { "deepEquals": { "body": { "salario": 600 } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"salary_below_minimum\", \"message\": \"O salário não pode ser inferior a 760€.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/funcionarios/1/salario" } },
+        { "deepEquals": { "body": { "salario": 700 } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"salary_below_minimum\", \"message\": \"O salário não pode ser inferior a 760€.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/funcionarios/1/salario" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"status\": \"updated\", \"message\": \"Salário atualizado com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/funcionarios/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"pending_tasks\", \"message\": \"Não é possível remover um funcionário com tarefas pendentes.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/funcionarios/2" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"status\": \"deleted\", \"message\": \"Funcionário removido com sucesso.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}
+
+###
+
+### GET /api/funcionarios → 200 + lista
+GET http://localhost:4547/api/funcionarios
+
+###
+
+### POST salário abaixo do mínimo (500) → 400
+POST http://localhost:4547/api/funcionarios
+Content-Type: application/json
+
+{"nome":"Novo","cargo":"Estagiario","salario":500}
+
+###
+
+### POST salário abaixo do mínimo (700) → 400
+POST http://localhost:4547/api/funcionarios
+Content-Type: application/json
+
+{"nome":"Novo","cargo":"Estagiario","salario":700}
+
+###
+
+### POST sucesso → 201 + Location
+POST http://localhost:4547/api/funcionarios
+Content-Type: application/json
+
+{"nome":"Sofia Dias","cargo":"Analista","salario":1100}
+
+###
+
+### PUT salário abaixo do mínimo (600) → 400
+PUT http://localhost:4547/api/funcionarios/1/salario
+Content-Type: application/json
+
+{"salario":600}
+
+###
+
+### PUT salário abaixo do mínimo (700) → 400
+PUT http://localhost:4547/api/funcionarios/1/salario
+Content-Type: application/json
+
+{"salario":700}
+
+###
+
+### PUT sucesso → 200
+PUT http://localhost:4547/api/funcionarios/1/salario
+Content-Type: application/json
+
+{"salario":1400}
+
+###
+
+### DELETE com tarefas pendentes → 400
+DELETE http://localhost:4547/api/funcionarios/1
+
+###
+
+### DELETE sem tarefas → 200
+DELETE http://localhost:4547/api/funcionarios/2

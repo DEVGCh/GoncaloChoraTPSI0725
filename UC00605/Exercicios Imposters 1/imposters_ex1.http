@@ -1,0 +1,480 @@
+### Limpa imposter anterior
+DELETE http://localhost:2525/imposters/4546
+
+###
+
+### Cria imposter completo
+POST http://localhost:2525/imposters
+
+{
+  "port": 4546,
+  "protocol": "http",
+  "name": "CarAPI",
+  "stubs": [
+
+
+    // Ex 1 - GET /api/marcas 
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "GET",
+            "path": "/api/marcas"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"marcas\": [\"Toyota\", \"Audi\", \"Ford\", \"Volvo\", \"Honda\"]}"
+          }
+        }
+      ]
+    },
+
+
+    // Ex 2 - GET /api/cars?brand=Toyota
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "GET",
+            "path": "/api/cars",
+            "query": "brand=Toyota"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"brand\": \"Toyota\", \"results\": [{\"id\": 1, \"modelo\": \"Corolla\", \"preco\": 22000}, {\"id\": 2, \"modelo\": \"Yaris\", \"preco\": 18000}]}"
+          }
+        }
+      ]
+    },
+
+
+    // Ex 3 - GET /api/cars sem parametros
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "GET",
+            "path": "/api/cars"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"results\": []}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 4 - POST /api/login com credenciais corretas
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/login"
+          }
+        },
+        {
+          "deepEquals": {
+            "body": {
+              "username": "admin",
+              "password": "secret"
+            }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"status\": \"ok\", \"token\": \"validtoken\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 5 - POST /api/login com credenciais invalidas
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/login"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 401,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"invalid_credentials\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 6 - POST /api/users com email duplicado
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/users",
+            "body": "exists@example.com"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 409,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"email_exists\", \"message\": \"O email já se encontra registado.\"}"
+          }
+        }
+      ]
+    },
+
+
+    // Ex 7 - POST /api/users com sucesso
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/users"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8",
+              "Location": "/api/users/42"
+            },
+            "body": "{\"id\": 42, \"status\": \"created\", \"message\": \"Utilizador criado com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 8 - POST /api/temperature sem value
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/temperature"
+          }
+        },
+        {
+          "not": {
+            "matches": {
+              "body": "value"
+            }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"missing_field\", \"message\": \"O campo 'value' é obrigatório.\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 9 - POST /api/temperature com value
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/temperature",
+            "body": "value"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"status\": \"created\", \"message\": \"Medição registada com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 10 - POST /api/tasks com title "duplicate"
+    {
+      "predicates": [
+      {
+        "matches": {
+        "method": "POST",
+        "path": "/api/tasks"
+        }
+      },
+      {
+      "matches": {
+        "body": "\"title\":\"duplicate\""
+        }
+      }
+  ],
+  "responses": [
+    {
+      "is": {
+        "statusCode": 409,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "body": "{\"error\": \"duplicate_task\", \"message\": \"Já existe uma tarefa com esse título.\"}"
+      }
+    }
+  ]
+},
+
+ 
+ 
+    // Ex. 11 — POST /api/tasks com sucesso
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/tasks"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8",
+              "Location": "/api/tasks/99"
+            },
+            "body": "{\"id\": 99, \"status\": \"created\"}"
+          }
+        }
+      ]
+    },
+
+ 
+ 
+    // Ex 12 - POST /api/auth com credenciais válidas
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/auth"
+          }
+        },
+        {
+          "deepEquals": {
+            "body": {
+              "username": "user1",
+              "password": "pass1"
+            }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"token\": \"validtoken\", \"expires_in\": 3600}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 12 (fallback) - POST /api/auth com credenciais inválidas
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST",
+            "path": "/api/auth"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 401,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"unauthorized\", \"message\": \"Credenciais inválidas.\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 13 - GET /api/profile com token válido
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "GET",
+            "path": "/api/profile",
+            "headers": {
+              "Authorization": "Bearer validtoken"
+            }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"username\": \"user1\", \"email\": \"user1@example.com\", \"role\": \"admin\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 13 (fallback) - GET /api/profile sem token ou token inválido
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "GET",
+            "path": "/api/profile"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 403,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"forbidden\", \"message\": \"Token ausente ou inválido.\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 14 - POST sem Content-Type: application/json -> 415
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "POST"
+          }
+        },
+        {
+          "not": {
+            "matches": {
+              "headers": {
+                "Content-Type": "application/json"
+              }
+            }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 415,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"unsupported_media_type\", \"message\": \"Content-Type application/json é obrigatório.\"}"
+          }
+        }
+      ]
+    },
+
+
+
+    // Ex 15 - GET genérico -> 404 (fallback final)
+    {
+      "predicates": [
+        {
+          "matches": {
+            "method": "GET"
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            },
+            "body": "{\"error\": \"not_found\", \"message\": \"Recurso não encontrado.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}

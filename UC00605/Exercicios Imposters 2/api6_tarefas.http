@@ -1,0 +1,168 @@
+# API 6 — Gestão de Tarefas
+
+### Limpar
+DELETE http://localhost:2525/imposters/4547
+
+###
+
+### Criar imposter
+POST http://localhost:2525/imposters
+
+{
+  "port": 4547,
+  "protocol": "http",
+  "name": "API6_Tarefas",
+  "stubs": [
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/tarefas" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"tarefas\": [{\"id\": 1, \"titulo\": \"Estudar Mountebank\", \"estado\": \"pendente\"}, {\"id\": 2, \"titulo\": \"Fazer relatório\", \"estado\": \"concluida\"}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/tarefas/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"titulo\": \"Estudar Mountebank\", \"descricao\": \"Rever exercícios\", \"estado\": \"pendente\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/tarefas" } },
+        { "deepEquals": { "body": { "titulo": "", "descricao": "Sem titulo" } } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"empty_title\", \"message\": \"O título da tarefa não pode estar vazio.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/tarefas" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/tarefas/3" },
+            "body": "{\"id\": 3, \"status\": \"created\", \"message\": \"Tarefa criada com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/tarefas/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"status\": \"updated\", \"message\": \"Tarefa atualizada com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/tarefas/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"task_not_concluded\", \"message\": \"Só é possível eliminar tarefas concluídas.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/tarefas/2" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"status\": \"deleted\", \"message\": \"Tarefa eliminada com sucesso.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}
+
+###
+
+### GET /api/tarefas → 200 + lista
+GET http://localhost:4547/api/tarefas
+
+###
+
+### GET /api/tarefas/1 → 200 + tarefa
+GET http://localhost:4547/api/tarefas/1
+
+###
+
+### POST título vazio → 400
+POST http://localhost:4547/api/tarefas
+Content-Type: application/json
+
+{"titulo":"","descricao":"Sem titulo"}
+
+###
+
+### POST sucesso → 201 + Location
+POST http://localhost:4547/api/tarefas
+Content-Type: application/json
+
+{"titulo":"Rever apontamentos","descricao":"UC00605"}
+
+###
+
+### PUT alterar estado → 200
+PUT http://localhost:4547/api/tarefas/1
+Content-Type: application/json
+
+{"estado":"concluida"}
+
+###
+
+### DELETE tarefa pendente → 400
+DELETE http://localhost:4547/api/tarefas/1
+
+###
+
+### DELETE tarefa concluída → 200
+DELETE http://localhost:4547/api/tarefas/2

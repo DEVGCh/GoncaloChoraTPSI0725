@@ -1,0 +1,227 @@
+### Confirma que imposter foi criado
+GET http://localhost:2525/imposters/4546
+
+###
+
+### Teste: qualquer rota desconhecida deve devolver resposta default
+GET http://localhost:4546/api/qualquer
+
+###
+
+### Ex 1 - Lista de marcas
+GET http://localhost:4546/api/marcas
+
+###
+
+### Ex 2 - Pesquisa por marca
+GET http://localhost:4546/api/cars?brand=Toyota
+
+###
+
+### Ex 3 sem parâmetros
+GET http://localhost:4546/api/cars
+
+###
+
+### Ex 3 (negativo)
+GET http://localhost:4546/api/cars?brand=Toyota
+
+###
+
+### Ex 4 - Login válido
+POST http://localhost:4546/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "secret"
+}
+
+###
+
+### Ex 5 - Login inválido (401)
+POST http://localhost:4546/api/login
+Content-Type: application/json
+
+{
+  "username": "hacker",
+  "password": "errada"
+}
+
+###
+
+### Ex 5 (negativo) - Credenciais corretas
+POST http://localhost:4546/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "secret"
+}
+
+###
+
+### Ex 6 - Email duplicado (409)
+POST http://localhost:4546/api/users
+Content-Type: application/json
+
+{
+  "nome": "Ana",
+  "email": "exists@example.com",
+  "idade": 30
+}
+
+###
+
+### Ex 7 - Novo utilizador (201 + Location)
+POST http://localhost:4546/api/users
+Content-Type: application/json
+
+{
+  "nome": "Carlos",
+  "email": "carlos@example.com",
+  "idade": 25
+}
+
+###
+
+### Ex 7 (negativo) - Email duplicado (409)
+POST http://localhost:4546/api/users
+Content-Type: application/json
+
+{
+  "nome": "Ana",
+  "email": "exists@example.com",
+  "idade": 30
+}
+
+
+###
+
+### Ex. 8 — Sem campo value (400)
+POST http://localhost:4546/api/temperature
+Content-Type: application/json
+
+{
+  "sensor_id": "s01"
+}
+
+
+###
+
+### Ex 9 - Com campo value (201)
+POST http://localhost:4546/api/temperature
+Content-Type: application/json
+
+{
+  "sensor_id": "s01",
+  "value": 23.5
+}
+
+###
+
+### Ex 9 - Sem value (400)
+POST http://localhost:4546/api/temperature
+Content-Type: application/json
+
+{
+  "sensor_id": "s01"
+}
+
+
+###
+
+### Ex 10 - Tarefa duplicada (409)
+POST http://localhost:4546/api/tasks
+Content-Type: application/json
+
+{
+  "title": "duplicate",
+  "descricao": "tarefa duplicada"
+}
+
+###
+
+### Ex 11 - Nova tarefa (201 + Location)
+POST http://localhost:4546/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Nova tarefa",
+  "descricao": "tarefa normal"
+}
+
+###
+
+### Ex 11 (negativo) - Title "duplicate" (409)
+POST http://localhost:4546/api/tasks
+Content-Type: application/json
+
+{
+  "title": "duplicate",
+  "descricao": "tarefa duplicada"
+}
+
+###
+
+### Ex 12 - Autenticação válida (200 + token + expires_in)
+POST http://localhost:4546/api/auth
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "pass1"
+}
+
+###
+
+### Ex 12 - Autenticação inválida (401)
+POST http://localhost:4546/api/auth
+Content-Type: application/json
+
+{
+  "username": "errado",
+  "password": "errado"
+}
+
+
+###
+
+### Ex 13 - Com token válido (200 + perfil)
+GET http://localhost:4546/api/profile
+Authorization: Bearer validtoken
+
+###
+
+### Ex 13 - Sem token (403)
+GET http://localhost:4546/api/profile
+
+
+###
+
+### Ex 14 - Content-Type errado (415)
+POST http://localhost:4546/api/qualquer
+Content-Type: text/plain
+
+qualquer coisa
+
+###
+
+### Ex 14 (negativo) - POST com Content-Type correto (401)
+POST http://localhost:4546/api/login
+Content-Type: application/json
+
+{
+  "username": "errado",
+  "password": "errada"
+}
+
+###
+
+### Ex 15 - Rota inexistente (404)
+GET http://localhost:4546/api/rota/nao/existe
+
+###
+
+### Ex 15 (negativo) 200
+GET http://localhost:4546/api/marcas

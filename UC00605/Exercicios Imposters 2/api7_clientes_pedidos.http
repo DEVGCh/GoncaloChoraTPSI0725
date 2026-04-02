@@ -1,0 +1,233 @@
+# API 7 — Clientes e Pedidos
+
+### Limpar
+DELETE http://localhost:2525/imposters/4547
+
+###
+
+### Criar imposter
+POST http://localhost:2525/imposters
+
+{
+  "port": 4547,
+  "protocol": "http",
+  "name": "API7_ClientesPedidos",
+  "stubs": [
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/clientes" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"clientes\": [{\"id\": 1, \"nome\": \"Loja ABC\", \"email\": \"loja@abc.pt\"}, {\"id\": 2, \"nome\": \"Empresa XYZ\", \"email\": \"geral@xyz.pt\"}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/clientes" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/clientes/3" },
+            "body": "{\"id\": 3, \"status\": \"created\", \"message\": \"Cliente adicionado com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/clientes/1/pedidos" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"cliente_id\": 1, \"pedidos\": [{\"id\": 101, \"produto\": \"Teclado\", \"quantidade\": 2, \"estado\": \"Enviado\"}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/clientes/999/pedidos" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"client_not_found\", \"message\": \"Cliente não encontrado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/pedidos", "body": "\"quantidade\":0" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"invalid_quantity\", \"message\": \"A quantidade tem de ser superior a zero.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/pedidos", "body": "\"cliente_id\":999" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"client_not_found\", \"message\": \"Cliente não encontrado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/pedidos" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/pedidos/101" },
+            "body": "{\"id\": 101, \"status\": \"created\", \"estado\": \"Em processamento\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/pedidos/101" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 101, \"status\": \"updated\", \"estado\": \"Enviado\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/pedidos/101" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"cannot_cancel\", \"message\": \"Só é possível cancelar pedidos em processamento.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/pedidos/102" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"status\": \"deleted\", \"message\": \"Pedido cancelado com sucesso.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}
+
+###
+
+### GET /api/clientes → 200 + lista
+GET http://localhost:4547/api/clientes
+
+###
+
+### POST cliente → 201 + Location
+POST http://localhost:4547/api/clientes
+Content-Type: application/json
+
+{"nome":"Nova Empresa","email":"nova@empresa.pt"}
+
+###
+
+### GET pedidos do cliente 1 → 200
+GET http://localhost:4547/api/clientes/1/pedidos
+
+###
+
+### GET pedidos cliente inexistente → 404
+GET http://localhost:4547/api/clientes/999/pedidos
+
+###
+
+### POST quantidade inválida → 400
+POST http://localhost:4547/api/pedidos
+Content-Type: application/json
+
+{"cliente_id":1,"produto":"Teclado","quantidade":0}
+
+###
+
+### POST cliente inexistente → 404
+POST http://localhost:4547/api/pedidos
+Content-Type: application/json
+
+{"cliente_id":999,"produto":"Teclado","quantidade":2}
+
+###
+
+### POST pedido sucesso → 201 + Location
+POST http://localhost:4547/api/pedidos
+Content-Type: application/json
+
+{"cliente_id":1,"produto":"Teclado","quantidade":2}
+
+###
+
+### PUT alterar estado → 200
+PUT http://localhost:4547/api/pedidos/101
+Content-Type: application/json
+
+{"estado":"Enviado"}
+
+###
+
+### DELETE pedido já enviado → 400
+DELETE http://localhost:4547/api/pedidos/101
+
+###
+
+### DELETE pedido em processamento → 200
+DELETE http://localhost:4547/api/pedidos/102

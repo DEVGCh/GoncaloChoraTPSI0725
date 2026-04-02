@@ -1,0 +1,254 @@
+# API 1 — Gestão de Alunos
+
+### Limpar
+DELETE http://localhost:2525/imposters/4547
+
+###
+
+### Criar imposter
+POST http://localhost:2525/imposters
+
+{
+  "port": 4547,
+  "protocol": "http",
+  "name": "API1_Alunos",
+  "stubs": [
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/alunos" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"alunos\": [{\"id\": 1, \"nome\": \"Ana Silva\", \"idade\": 20, \"curso\": \"Informatica\"}, {\"id\": 2, \"nome\": \"Carlos Costa\", \"idade\": 22, \"curso\": \"Gestao\"}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/alunos/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"nome\": \"Ana Silva\", \"idade\": 20, \"curso\": \"Informatica\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/alunos" } },
+        {
+          "deepEquals": {
+            "body": { "nome": "Crianca", "idade": 5, "curso": "Informatica" }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"invalid_age\", \"message\": \"Idade mínima não atingida.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/alunos" } },
+        {
+          "deepEquals": {
+            "body": { "nome": "Crianca", "idade": 8, "curso": "Informatica" }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"invalid_age\", \"message\": \"Idade mínima não atingida.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/alunos" } },
+        {
+          "deepEquals": {
+            "body": { "nome": "Crianca", "idade": 9, "curso": "Informatica" }
+          }
+        }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"invalid_age\", \"message\": \"Idade mínima não atingida.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/alunos", "body": "CursoInexistente" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"course_not_found\", \"message\": \"Curso não encontrado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/alunos" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/alunos/3" },
+            "body": "{\"id\": 3, \"status\": \"created\", \"message\": \"Aluno adicionado com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/alunos/999" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"not_found\", \"message\": \"Aluno não encontrado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/alunos/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"status\": \"updated\", \"message\": \"Dados do aluno atualizados.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/alunos/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 403,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"forbidden\", \"message\": \"Apenas administradores podem eliminar alunos.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}
+
+###
+
+### GET /api/alunos → 200 + lista
+GET http://localhost:4547/api/alunos
+
+###
+
+### GET /api/alunos/1 → 200 + aluno
+GET http://localhost:4547/api/alunos/1
+
+###
+
+### POST idade inválida (5) → 400
+POST http://localhost:4547/api/alunos
+Content-Type: application/json
+
+{"nome":"Crianca","idade":5,"curso":"Informatica"}
+
+###
+
+### POST idade inválida (8) → 400
+POST http://localhost:4547/api/alunos
+Content-Type: application/json
+
+{"nome":"Crianca","idade":8,"curso":"Informatica"}
+
+###
+
+### POST idade inválida (9) → 400
+POST http://localhost:4547/api/alunos
+Content-Type: application/json
+
+{"nome":"Crianca","idade":9,"curso":"Informatica"}
+
+###
+
+### POST curso inexistente → 404
+POST http://localhost:4547/api/alunos
+Content-Type: application/json
+
+{"nome":"Joao","idade":20,"curso":"CursoInexistente"}
+
+###
+
+### POST sucesso → 201 + Location
+POST http://localhost:4547/api/alunos
+Content-Type: application/json
+
+{"nome":"Pedro Lopes","idade":19,"curso":"Gestao"}
+
+###
+
+### PUT aluno inexistente → 404
+PUT http://localhost:4547/api/alunos/999
+Content-Type: application/json
+
+{"nome":"Ninguem","idade":25,"curso":"Gestao"}
+
+###
+
+### PUT sucesso → 200
+PUT http://localhost:4547/api/alunos/1
+Content-Type: application/json
+
+{"nome":"Ana Silva","idade":21,"curso":"Informatica"}
+
+###
+
+### DELETE sem permissões → 403
+DELETE http://localhost:4547/api/alunos/1

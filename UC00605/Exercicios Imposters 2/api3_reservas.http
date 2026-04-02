@@ -1,0 +1,196 @@
+# API 3 — Reservas de Hotel
+
+### Limpar
+DELETE http://localhost:2525/imposters/4547
+
+###
+
+### Criar imposter
+POST http://localhost:2525/imposters
+
+{
+  "port": 4547,
+  "protocol": "http",
+  "name": "API3_Reservas",
+  "stubs": [
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/reservas" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"reservas\": [{\"id\": 1, \"cliente\": \"Ana Silva\", \"checkin\": \"2026-04-01\", \"checkout\": \"2026-04-05\", \"tipo_quarto\": \"duplo\"}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/reservas", "body": "\"checkout\":\"2026-03-01\"" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"invalid_dates\", \"message\": \"A data de checkout não pode ser anterior ao checkin.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/reservas", "body": "suite" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 409,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"no_availability\", \"message\": \"Sem disponibilidade para o quarto solicitado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/reservas" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/reservas/2" },
+            "body": "{\"id\": 2, \"status\": \"created\", \"message\": \"Reserva criada com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/reservas/999" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"not_found\", \"message\": \"Reserva não encontrada.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/reservas/2" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"modification_deadline\", \"message\": \"Não é possível alterar a reserva com menos de 24h de antecedência.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/reservas/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"status\": \"updated\", \"message\": \"Reserva atualizada com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/reservas/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 400,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"checkin_passed\", \"message\": \"Não é possível cancelar uma reserva após o checkin.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}
+
+###
+
+### GET /api/reservas → 200 + lista
+GET http://localhost:4547/api/reservas
+
+###
+
+### POST datas inválidas → 400
+POST http://localhost:4547/api/reservas
+Content-Type: application/json
+
+{"cliente":"Rui","checkin":"2026-04-10","checkout":"2026-03-01","tipo_quarto":"duplo"}
+
+###
+
+### POST quarto cheio (suite) → 409
+POST http://localhost:4547/api/reservas
+Content-Type: application/json
+
+{"cliente":"Rui","checkin":"2026-04-10","checkout":"2026-04-15","tipo_quarto":"suite"}
+
+###
+
+### POST sucesso → 201 + Location
+POST http://localhost:4547/api/reservas
+Content-Type: application/json
+
+{"cliente":"Rui","checkin":"2026-04-10","checkout":"2026-04-15","tipo_quarto":"duplo"}
+
+###
+
+### PUT reserva inexistente → 404
+PUT http://localhost:4547/api/reservas/999
+Content-Type: application/json
+
+{"tipo_quarto":"single"}
+
+###
+
+### PUT fora do prazo → 400
+PUT http://localhost:4547/api/reservas/2
+Content-Type: application/json
+
+{"tipo_quarto":"single"}
+
+###
+
+### PUT sucesso → 200
+PUT http://localhost:4547/api/reservas/1
+Content-Type: application/json
+
+{"tipo_quarto":"single"}
+
+###
+
+### DELETE após checkin → 400
+DELETE http://localhost:4547/api/reservas/1

@@ -1,0 +1,190 @@
+# API 4 — Biblioteca Digital
+
+### Limpar
+DELETE http://localhost:2525/imposters/4547
+
+###
+
+### Criar imposter
+POST http://localhost:2525/imposters
+
+{
+  "port": 4547,
+  "protocol": "http",
+  "name": "API4_Biblioteca",
+  "stubs": [
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/livros" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"livros\": [{\"id\": 1, \"titulo\": \"Clean Code\", \"autor\": \"Robert Martin\", \"disponivel\": true}, {\"id\": 2, \"titulo\": \"The Pragmatic Programmer\", \"autor\": \"Hunt & Thomas\", \"disponivel\": false}]}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "GET", "path": "/api/livros/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 1, \"titulo\": \"Clean Code\", \"autor\": \"Robert Martin\", \"disponivel\": true}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/emprestimos", "body": "\"livro_id\":2" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 409,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"book_unavailable\", \"message\": \"O livro já se encontra emprestado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "POST", "path": "/api/emprestimos" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 201,
+            "headers": { "Content-Type": "application/json; charset=utf-8", "Location": "/api/emprestimos/10" },
+            "body": "{\"id\": 10, \"status\": \"created\", \"message\": \"Empréstimo registado com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/emprestimos/999/devolucao" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 404,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"loan_not_found\", \"message\": \"Empréstimo não encontrado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "PUT", "path": "/api/emprestimos/10/devolucao" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"id\": 10, \"status\": \"returned\", \"message\": \"Livro devolvido com sucesso.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/livros/2" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 409,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"error\": \"book_on_loan\", \"message\": \"Não é possível remover um livro que está emprestado.\"}"
+          }
+        }
+      ]
+    },
+
+    {
+      "predicates": [
+        { "matches": { "method": "DELETE", "path": "/api/livros/1" } }
+      ],
+      "responses": [
+        {
+          "is": {
+            "statusCode": 200,
+            "headers": { "Content-Type": "application/json; charset=utf-8" },
+            "body": "{\"status\": \"deleted\", \"message\": \"Livro removido do catálogo.\"}"
+          }
+        }
+      ]
+    }
+
+  ]
+}
+
+###
+
+### GET /api/livros → 200 + lista
+GET http://localhost:4547/api/livros
+
+###
+
+### GET /api/livros/1 → 200 + livro
+GET http://localhost:4547/api/livros/1
+
+###
+
+### POST livro já emprestado → 409
+POST http://localhost:4547/api/emprestimos
+Content-Type: application/json
+
+{"cliente":"Ana","livro_id":2,"data_emprestimo":"2026-03-24"}
+
+###
+
+### POST empréstimo sucesso → 201 + Location
+POST http://localhost:4547/api/emprestimos
+Content-Type: application/json
+
+{"cliente":"Ana","livro_id":1,"data_emprestimo":"2026-03-24"}
+
+###
+
+### PUT empréstimo inexistente → 404
+PUT http://localhost:4547/api/emprestimos/999/devolucao
+Content-Type: application/json
+
+{}
+
+###
+
+### PUT devolução sucesso → 200
+PUT http://localhost:4547/api/emprestimos/10/devolucao
+Content-Type: application/json
+
+{}
+
+###
+
+### DELETE livro emprestado → 409
+DELETE http://localhost:4547/api/livros/2
+
+###
+
+### DELETE livro disponível → 200
+DELETE http://localhost:4547/api/livros/1
